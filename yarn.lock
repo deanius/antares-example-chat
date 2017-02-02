@@ -364,6 +364,10 @@ readable-stream@^2.0.2, readable-stream@^2.2.1:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
+redux-act@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/redux-act/-/redux-act-1.1.0.tgz#941f6999f73b02d876f26aa0d76b0b61ce3e58bc"
+
 regenerator-runtime@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.1.tgz#257f41961ce44558b18f7814af48c17559f9faeb"
