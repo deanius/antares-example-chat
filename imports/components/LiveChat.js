@@ -59,18 +59,26 @@ class _LiveChat extends React.Component {
     }
 
     render() {
-        let { currentSender, messages = [], isTyping } = this.props
+        let { currentSender, messages = [], senders = [] } = this.props
         return (
             <div>
                 <div className="sm">
-                    View As: <b>Self</b> &nbsp;|&nbsp;
-                    <a
-                      href="#change-sides"
-                      onClick={(e) => {
-                          e.preventDefault()
-                      }}
-                    >Other</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    View As: <b>Self</b>&nbsp;
+                    {
+                        senders
+                            .filter(sender => sender !== 'Self')
+                            .map(sender => (
+                            <a
+                                key={sender}    
+                                href="#change-sides"
+                                onClick={(e) => {
+                                        e.preventDefault()
+                                    }}
+                                className='sender'    
+                            >{sender}</a>
+                            ))
+                    }
+                    
                     <button
                       style={{ position: 'relative', top: -1 }}
                       onClick={(e) => {

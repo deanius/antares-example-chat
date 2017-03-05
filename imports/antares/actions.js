@@ -17,5 +17,13 @@ export default {
                 sentAt: new Date()
             }
         })
+    },
+    View: {
+        selectViewer: (viewer) => ({
+            type: 'View.selectViewer',
+            payload: viewer,
+            meta: { antares: { localOnly: true } }
+        })
     }
+    
 }

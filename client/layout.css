@@ -69,3 +69,7 @@ body{
    text-align: right;
    background-color: #aaf;
 }
+
+.sender::before { 
+    content: " | ";
+}
