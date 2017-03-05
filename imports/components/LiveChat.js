@@ -20,11 +20,16 @@ import { mockChat } from '../fixtures/chat'
 //   currentSender: String
 //   typingNotification: truthy
 const mapStateToProps = (state) => {
-    if (state.antares.getIn(['Chats', 'chat:demo'])) {
-        return state.antares.getIn(['Chats', 'chat:demo']).toJS()
-    } else {
+    if (!state.antares.getIn(['Chats', 'chat:demo'])) {
         return mockChat
     }
+
+    // modify what's returned from state to reflect the view of the currentSender    
+    const currentSender = state.view.get('viewingAs')    
+
+    return state.antares.getIn(['Chats', 'chat:demo'])
+        .set('currentSender', currentSender)    
+        .toJS()
 }
 
 class _LiveChat extends React.Component {
@@ -63,16 +68,17 @@ class _LiveChat extends React.Component {
         return (
             <div>
                 <div className="sm">
-                    View As: <b>Self</b>&nbsp;
+                    View As: <b>{currentSender}</b>&nbsp;
                     {
                         senders
-                            .filter(sender => sender !== 'Self')
+                            .filter(sender => sender !== currentSender)
                             .map(sender => (
                             <a
                                 key={sender}    
                                 href="#change-sides"
                                 onClick={(e) => {
                                         e.preventDefault()
+                                        announce(Actions.View.selectViewer, sender)
                                     }}
                                 className='sender'    
                             >{sender}</a>
