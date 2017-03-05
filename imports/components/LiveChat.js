@@ -2,6 +2,7 @@ import React from 'react'
 import { Map } from 'immutable'
 import { connect } from 'react-redux'
 import { announce, originate } from '../antares/main'
+import Actions from '../antares/actions'
 import { mockChat } from '../fixtures/chat'
 
 // The 4 parts of this file:
@@ -45,6 +46,12 @@ class _LiveChat extends React.Component {
         this.setState({ inProgressMessage: '' })
     }
 
+    initChat() {
+        announce(Actions.Chat.start)
+        announce(Actions.Message.send, { message: 'Hello!', sender: 'Self' })
+        announce(Actions.Message.send, { message: 'Sup.', sender: 'Other 1' })
+    }
+
     render() {
         let { currentSender, messages = [], isTyping } = this.props
         return (
@@ -61,6 +68,7 @@ class _LiveChat extends React.Component {
                     <button
                       style={{ position: 'relative', top: -1 }}
                       onClick={(e) => {
+                          this.initChat()  
                           e.preventDefault()
                       }}
                     >Start/Restart Chat ⟳</button>
