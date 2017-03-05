@@ -15,3 +15,9 @@ export const ChatReducer = combineReducers({
     senders: sendersReducer,
     messages: messageReducer,
 })
+
+export const ViewReducer = combineReducers({
+    viewingAs: createReducer({
+        'View.selectViewer': (viewer, newViewer) => newViewer
+    }, 'Self')
+})
