@@ -28,7 +28,14 @@ const mapStateToProps = (state) => {
     const currentSender = state.view.get('viewingAs')    
 
     return state.antares.getIn(['Chats', 'chat:demo'])
-        .set('currentSender', currentSender)    
+        .set('currentSender', currentSender)
+        .update('messages', messages => messages.map(message => {
+            if (message.get('sender') === currentSender) {
+                return message.set('sentByMe', true)
+            } else {
+                return message
+            }
+        }))
         .toJS()
 }
 
