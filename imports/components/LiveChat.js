@@ -19,7 +19,13 @@ import { mockChat } from '../fixtures/chat'
 //   messages: [{message, sentAt, sender, sentByMe}]
 //   currentSender: String
 //   typingNotification: truthy
-const mapStateToProps = (state) => (mockChat)
+const mapStateToProps = (state) => {
+    if (state.antares.getIn(['Chats', 'chat:demo'])) {
+        return state.antares.getIn(['Chats', 'chat:demo']).toJS()
+    } else {
+        return mockChat
+    }
+}
 
 class _LiveChat extends React.Component {
     constructor(props) {
