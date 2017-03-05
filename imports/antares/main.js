@@ -13,7 +13,7 @@ const AntaresConfig = {
 
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
-export const { announce, originate, store } = Antares
+export const { announce, originate, store, subscribe } = Antares
 
 // Example: In 'any' agent expose a top-level Antares globals for demo purposes
 inAgencyRun('any', function () {
