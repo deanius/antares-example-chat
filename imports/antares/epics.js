@@ -14,7 +14,7 @@ export default {
     removeTypingNotification: action$ =>
         action$.ofType('Activity.notifyOfTyping')
             .filter(a => a.payload.active === true)
-            .mergeMap(notificationOnAction =>
+            .switchMap(notificationOnAction =>
                 Rx.Observable.timer(2500)
                     .map(() => ({
                         type: 'Activity.notifyOfTyping',
@@ -22,10 +22,8 @@ export default {
                             active: false,
                             sender: notificationOnAction.payload.sender
                         },
-                        meta: {
-                            antares: {
-                                localOnly: false
-                            }
-                        }
+                        // We dont need to send out these actions - each agent will run this
+                        // epic, clearing its own indicator accordingly.
+                        meta: { antares: { localOnly: true } }
                     })))
 }
