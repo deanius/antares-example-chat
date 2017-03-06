@@ -16,8 +16,18 @@ export const ChatReducer = combineReducers({
     messages: messageReducer,
 })
 
+const activityReducer = createReducer({
+    'Activity.notifyOfTyping': (state, { active, sender }) => {
+        if (active) {
+            return state.setIn(['isTyping', sender], active)
+        }
+        return state.deleteIn(['isTyping', sender])
+    }
+}, fromJS({ isTyping: {} }))
+
 export const ViewReducer = combineReducers({
     viewingAs: createReducer({
         'View.selectViewer': (viewer, newViewer) => newViewer
-    }, 'Self')
+    }, 'Self'),
+    activity: activityReducer
 })

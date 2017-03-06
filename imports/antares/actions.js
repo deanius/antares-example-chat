@@ -1,4 +1,15 @@
 export default {
+    Activity: {
+        type: ({ sender }) => ({
+            type: 'Activity.type',
+            payload: { sender },
+            meta: { antares: { localOnly: true } }
+        }),
+        notifyOfTyping: ({ sender, active=true }) => ({
+            type: 'Activity.notifyOfTyping',
+            payload: { active, sender }
+        })
+    },
     Chat: {
         start: () => ({
             type: 'Antares.store',
@@ -24,6 +35,5 @@ export default {
             payload: viewer,
             meta: { antares: { localOnly: true } }
         })
-    }
-    
+    }    
 }

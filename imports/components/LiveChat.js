@@ -26,9 +26,12 @@ const mapStateToProps = (state) => {
 
     // modify what's returned from state to reflect the view of the currentSender    
     const currentSender = state.view.get('viewingAs')    
-
+    const othersTyping = Array.from(state.view.getIn(['activity', 'isTyping']).keys())
+        .filter(sender => sender !== currentSender)
+        
     return state.antares.getIn(['Chats', 'chat:demo'])
         .set('currentSender', currentSender)
+        .set('othersTyping', othersTyping)
         .update('messages', messages => messages.map(message => {
             if (message.get('sender') === currentSender) {
                 return message.set('sentByMe', true)
@@ -75,7 +78,7 @@ class _LiveChat extends React.Component {
     }
 
     render() {
-        let { currentSender, messages = [], senders = [] } = this.props
+        let { currentSender, messages = [], senders = [], othersTyping = [] } = this.props
         return (
             <div>
                 <div className="sm">
@@ -122,7 +125,10 @@ class _LiveChat extends React.Component {
                     ))}
                 </div>
 
-                <div className="msg msg-theirs"><i>. . .</i></div>
+                {
+                    othersTyping.length > 0 &&                
+                    <div className="msg msg-theirs"><i>. . .</i></div>
+                }
 
                 <div className="inProgressMessage">
                     <textarea
