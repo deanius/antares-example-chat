@@ -15,7 +15,12 @@ export default {
         action$.ofType('Activity.notifyOfTyping')
             .filter(a => a.payload.active === true)
             .switchMap(notificationOnAction =>
-                Rx.Observable.timer(2500)
+                Rx.Observable.race(
+                    Rx.Observable.timer(2500),
+                    action$.filter(action => 
+                        action.type === 'Message.send' &&
+                        action.payload.sender === notificationOnAction.payload.sender
+                    ))
                     .map(() => ({
                         type: 'Activity.notifyOfTyping',
                         payload: {
