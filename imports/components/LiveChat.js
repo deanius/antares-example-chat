@@ -61,6 +61,9 @@ class _LiveChat extends React.Component {
     handleTyping(event) {
         // Tell React of the new value to render in the input
         this.setState({ inProgressMessage: event.target.value })
+
+        // Announce one of these events (locally) on every change
+        announce(Actions.Activity.type, { sender: this.props.currentSender })
     }
 
     handleSend() {

@@ -1,6 +1,7 @@
 import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
 
 import Actions from './actions'
+import Epics from './epics'
 import { ChatReducer, ViewReducer } from './reducers'
 
 const MetaEnhancers = [() => ({ key: ['Chats', 'chat:demo'] })]
@@ -8,6 +9,7 @@ const ReducerForKey = () => ChatReducer
 const AntaresConfig = {
     Actions,
     ReducerForKey,
+    Epics,
     MetaEnhancers,
     ViewReducer
 }
