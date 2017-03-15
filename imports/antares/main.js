@@ -1,4 +1,5 @@
-import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
+import { AntaresMeteorInit, AntaresInit, inAgencyRun, mongoRendererFor } from 'meteor/deanius:antares'
+import { Mongo } from 'meteor/mongo'
 
 import Actions from './actions'
 import Epics from './epics'
@@ -26,4 +27,12 @@ inAgencyRun('any', function () {
         announce: Antares.announce,
         log: console.log.bind(console)
     })
+})
+
+inAgencyRun('server', () => {
+    const Collections = {
+        Smiles: new Mongo.Collection('Smiles')
+    }
+
+    Antare.subscribeRenderer(mongoRendererFor(Collections))
 })
