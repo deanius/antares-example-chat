@@ -3,9 +3,11 @@
   "private": true,
   "scripts": {
     "start": "meteor run --port 3333",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "test:load": "./node_modules/babel-cli/bin/babel-node.js --presets node6 tests/repeatedUpdates.js"
   },
   "dependencies": {
+    "antares-protocol": "^0.3.14",
     "babel-runtime": "^6.20.0",
     "immutable": "^3.8.1",
     "meteor-node-stubs": "~0.2.0",
@@ -16,5 +18,13 @@
     "redux-act": "^1.1.1",
     "redux-immutable": "^3.1.0",
     "rxjs": "^5.2.0"
+  },
+  "devDependencies": {
+    "ascii-progress": "^1.0.5",
+    "babel-cli": "^6.24.0",
+    "babel-preset-node6": "^11.0.0",
+    "bluebird": "^3.5.0",
+    "faye-websocket": "^0.11.1",
+    "mathjs": "^3.10.0"
   }
 }
