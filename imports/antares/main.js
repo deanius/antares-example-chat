@@ -29,12 +29,15 @@ inAgencyRun('any', function () {
     })
 })
 
+// Writing to Mongo is easy
 inAgencyRun('server', () => {
+    // 1. Import or create your collections
     const Collections = {
         Chats: new Mongo.Collection('Chats')
     }
 
-    Antares.subscribeRenderer(Meteor.bindEnvironment(({ mongoDiff }) => {
+    // 2. Create a function that writes to the collections
+    const applyDiffToMongo = ({ mongoDiff }) => {
         // The mongoDiff object, available after every action, contains enough information to
         // apply the reducer's diffs to a Mongo database.. First we pluck off those interesting fields.
         if (mongoDiff) {
@@ -51,7 +54,14 @@ inAgencyRun('server', () => {
             console.log('MDB> ', updateOp)
             Collections[collection].update(...mongoArgs)
         }
-    }), {
+    }
+    // Needed in Meteor to preserve user identity etc...
+    const renderer = Meteor.bindEnvironment(applyDiffToMongo)
+
+    // 3. Subscribe that function either synchronously (rendering errors
+    // blow the call stack), or async (retry-able, batchable, compensating
+    // xactions must be issued upon error)
+    Antares.subscribeRenderer(renderer, {
         mode: 'async',
         xform: diff$ => diff$.delay(1500)    
     })
