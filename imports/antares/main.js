@@ -18,7 +18,6 @@ const AntaresConfig = {
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
 export const { announce, originate, store, subscribe } = Antares
-const { mongoRendererFor } = Antares
 
 // Example: In 'any' agent expose a top-level Antares globals for demo purposes
 inAgencyRun('any', function () {
@@ -35,8 +34,21 @@ inAgencyRun('server', () => {
         Chats: new Mongo.Collection('Chats')
     }
 
-    Antares.subscribeRenderer(mongoRendererFor(Collections), {
-        mode: 'async',
-        xform: action$ => action$.delay(1000)
+    Antares.subscribeRenderer(({ mongoDiff }) => {
+        // The mongoDiff object, available after every action, contains enough information to
+        // apply the reducer's diffs to a Mongo database.. First we pluck off those interesting fields.
+        if (mongoDiff) {
+            let { id, collection, upsert, updateOp } = mongoDiff
+
+            // Then construct the arguments mongo needs to do the update
+            let mongoArgs = [
+                { _id: id },  // the target id for an update, or the _id of the new document
+                updateOp,     // the update op eg. $set{ 'field': 'val' }
+                { upsert }    // mostly set to true
+            ]
+
+            // Do the actual imperative update to the database, and handle exceptions..
+            Collections[collection].update(...mongoArgs)
+        }
     })
 })
