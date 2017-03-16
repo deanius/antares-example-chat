@@ -66,3 +66,11 @@ inAgencyRun('server', () => {
         xform: diff$ => diff$.delay(1500)    
     })
 })
+
+inAgencyRun('client', () => {
+    Antares.subscribeRenderer(({ action }) => {
+        if (action.type === 'Message.send') {
+            window.scrollTo(0,document.body.scrollHeight)        
+        }
+    })
+})
