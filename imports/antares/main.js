@@ -34,7 +34,7 @@ inAgencyRun('server', () => {
         Chats: new Mongo.Collection('Chats')
     }
 
-    Antares.subscribeRenderer(({ mongoDiff }) => {
+    Antares.subscribeRenderer(Meteor.bindEnvironment(({ mongoDiff }) => {
         // The mongoDiff object, available after every action, contains enough information to
         // apply the reducer's diffs to a Mongo database.. First we pluck off those interesting fields.
         if (mongoDiff) {
@@ -48,7 +48,11 @@ inAgencyRun('server', () => {
             ]
 
             // Do the actual imperative update to the database, and handle exceptions..
+            console.log('MDB> ', updateOp)
             Collections[collection].update(...mongoArgs)
         }
+    }), {
+        mode: 'async',
+        xform: diff$ => diff$.delay(1500)    
     })
 })
