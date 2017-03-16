@@ -23,19 +23,25 @@ const { Observable } = Rx
 //   "success": 5,
 //   "error": 0
 //  }  - but no chats went to the site
-const connectionUrl = 'wss://antares-example-chat.herokuapp.com:443/websocket'
+// const connectionUrl = 'wss://antares-example-chat.herokuapp.com:443/websocket'
+const connectionUrl = 'ws://localhost:3333/websocket'
 
 // Test parameters
 const numAgents = 3
 const numActionsPerAgent = 5
-const timeBetweenActions = 250
-const maxWaitTime = 2500
-// Start all at once: 0
-// Stagger evenly: timeBetweenActions / numAgents
-const agentOffset = 0 // timeBetweenActions / numAgents
+
 // No randomness: 1
 // Poisson randomness: -Math.log(1.0 - Math.random())  // (Preserves average rate)
+const timeBetweenActions = 10
+// multiplies the timeBetweenActions
 const getRandomFactor = () => -Math.log(1.0 - Math.random())
+
+// consider a test failed if it takes longer than maxWaitTime
+const maxWaitTime = 2500
+
+// Start all at once: 0
+// Stagger evenly: timeBetweenActions / numAgents
+const agentOffset = timeBetweenActions / numAgents
 
 /* ************** Antares config ******************* */
 const Antares = AntaresInit({ // eslint-disable-line new-cap
@@ -55,7 +61,7 @@ Antares.announce({
     }
 })
 // If we want results to come back (for waiting upon them, or calculating their size)
-// Antares.subscribe('*')
+Antares.subscribe('*')
 
 // /* ************** Test identifiers lookup ******************* */
 // // If we need to do this maybe its a sign we should have set the ids beforehand
@@ -90,7 +96,7 @@ const getAgentTask = ({ agentIdx, eidx }) => () =>
     Promise.resolve().then(() =>     
         Antares.announce(Actions.Message.send, {
             sender: senders[agentIdx],
-            message: `Hey from ${senders[agentIdx]}`
+            message: `Hey, ${dateMark().substring(2)} (${senders[agentIdx]})`
         })
     ).timeout(maxWaitTime)
 
