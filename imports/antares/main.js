@@ -27,3 +27,11 @@ inAgencyRun('any', function () {
         log: console.log.bind(console)
     })
 })
+
+inAgencyRun('client', () => {
+    Antares.subscribeRenderer(({ action }) => {
+        if (action.type === 'Message.send') {
+            window.scrollTo(0,document.body.scrollHeight)        
+        }
+    })
+})
