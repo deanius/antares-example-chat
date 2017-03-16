@@ -28,7 +28,7 @@ const connectionUrl = 'wss://antares-example-chat.herokuapp.com:443/websocket'
 // Test parameters
 const numAgents = 3
 const numActionsPerAgent = 5
-const timeBetweenActions = 0
+const timeBetweenActions = 250
 const maxWaitTime = 2500
 // Start all at once: 0
 // Stagger evenly: timeBetweenActions / numAgents
