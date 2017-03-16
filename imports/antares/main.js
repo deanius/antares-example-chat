@@ -1,4 +1,4 @@
-import { AntaresMeteorInit, AntaresInit, inAgencyRun, mongoRendererFor } from 'meteor/deanius:antares'
+import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
 import { Mongo } from 'meteor/mongo'
 
 import Actions from './actions'
@@ -18,6 +18,7 @@ const AntaresConfig = {
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
 export const { announce, originate, store, subscribe } = Antares
+const { mongoRendererFor } = Antares
 
 // Example: In 'any' agent expose a top-level Antares globals for demo purposes
 inAgencyRun('any', function () {
@@ -31,8 +32,11 @@ inAgencyRun('any', function () {
 
 inAgencyRun('server', () => {
     const Collections = {
-        Smiles: new Mongo.Collection('Smiles')
+        Chats: new Mongo.Collection('Chats')
     }
 
-    Antare.subscribeRenderer(mongoRendererFor(Collections))
+    Antares.subscribeRenderer(mongoRendererFor(Collections), {
+        mode: 'async',
+        xform: action$ => action$.delay(1000)
+    })
 })
