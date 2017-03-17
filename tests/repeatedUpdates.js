@@ -27,13 +27,13 @@ const connectionUrl = 'wss://antares-example-chat.herokuapp.com:443/websocket'
 // const connectionUrl = 'ws://localhost:3333/websocket'
 
 // Test parameters
-const numAgents = 3
-const numActionsPerAgent = 5
+const numAgents = 2
+const numActionsPerAgent = 7
 
 // Non-zero timeBetweenActions are subject to the randomFactor.
 // This is an analgous to a random (very random) but consistently
 // average network travel time of this:
-const timeBetweenActions = 100
+const timeBetweenActions = 0
 // No randomness: 1
 // Poisson randomness: -Math.log(1.0 - Math.random())  // (Preserves average rate)
 const getRandomFactor = () => -Math.log(1.0 - Math.random())
@@ -43,7 +43,7 @@ const maxWaitTime = 2500
 
 // Start all at once: 0
 // Stagger evenly: timeBetweenActions / numAgents
-const agentOffset = timeBetweenActions / numAgents
+const agentOffset = 0 //timeBetweenActions / numAgents
 
 /* ************** Antares config ******************* */
 const Antares = AntaresInit({ // eslint-disable-line new-cap
@@ -131,12 +131,13 @@ let agentWork = (progress, agentIdx) => Observable
     .range(0, numActionsPerAgent)
     .concatMap(eidx => {
         progress.tick()
+        let nextEventDelay = getRandomFactor() * timeBetweenActions
         return Observable.fromPromise(Promise
-            .delay(getRandomFactor() * timeBetweenActions)
+            .delay(nextEventDelay)
             .then(getAgentTask({ agentIdx, eidx }))
             .then(markSuccess, markFailure)
         ).timeInterval()
-        .do(({ interval }) => markDuration(interval))
+        .do(({ interval }) => markDuration(Math.round(interval - nextEventDelay)))
     })
     // Staggered starts
     .startWith(Observable.timer(agentIdx * agentOffset))
