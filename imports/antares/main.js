@@ -35,3 +35,13 @@ inAgencyRun('client', () => {
         }
     })
 })
+
+inAgencyRun('server', () => {
+    Antares.subscribeRenderer(({ action }) => {
+        if (action.type === 'Message.send' && action.payload.message.includes('server error')) {
+            throw new Error('he shits the bed at the battle of Monmouth')
+        } else {
+            console.warn('Still rendering')
+        }
+    }, {mode: 'sync'})
+})
