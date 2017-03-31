@@ -67,9 +67,20 @@ class _LiveChat extends React.Component {
     }
 
     handleSend() {
+        let message = this.state.inProgressMessage
+        let sender = this.props.currentSender
+
         announce(Actions.Message.send, {
-            message: this.state.inProgressMessage,
-            sender: this.props.currentSender
+            message,
+            sender
+        }).catch(e => {
+            announce(Actions.Message.markError, {
+                message,
+                sender
+            })
+            this.setState(oldState =>
+                (oldState.inProgressMessage !== '') ? oldState : { ...oldState, inProgressMessage: message }
+            )
         })
         this.setState({ inProgressMessage: '' })
     }

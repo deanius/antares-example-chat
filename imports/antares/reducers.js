@@ -5,6 +5,12 @@ import { combineReducers } from 'redux-immutable'
 const messageReducer = createReducer({
     'Message.send': (msgs, message) => {
         return msgs.push(fromJS(message))
+    },
+    'Message.markError': (msgs, { message, sender }) => {
+        return msgs.map(msg => {
+            return (msg.get('message') === message && msg.get('sender') === sender) ?
+                msg.set('error', true) : msg
+        })
     }
 }, new List([]))
 

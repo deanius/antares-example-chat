@@ -27,6 +27,13 @@ export default {
                 // Since the user cares about sentAt it's payload, not simply metadata
                 sentAt: new Date()
             }
+        }),
+        markError: ({ message, sender }) => ({
+            type: 'Message.markError',
+            payload: { 
+                message,
+                sender
+            }
         })
     },
     View: {
