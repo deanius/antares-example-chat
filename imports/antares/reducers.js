@@ -1,9 +1,15 @@
 import { List, fromJS } from 'immutable'
 import { createReducer } from 'redux-act'
 import { combineReducers } from 'redux-immutable'
+import { inAgencyRun } from 'meteor/deanius:antares'
 
 const messageReducer = createReducer({
     'Message.send': (msgs, message) => {
+        inAgencyRun('server', () => {
+            if (message.message.includes('server error')) {
+                throw new Error('he shits the bed at the battle of Monmouth')
+            }
+        })
         return msgs.push(fromJS(message))
     },
     'Message.markError': (msgs, { message, sender }) => {
