@@ -8,6 +8,6 @@ import { store, subscribe } from '/imports/antares'
 Meteor.startup(() => {
     render(<LiveChat store={store} />, document.getElementById('react-root'))
 
-    subscribe({ key: ['Chats', 'chat:demo'] })
+    subscribe({ key: ['chats', 'chat:demo'] })
     // Since we have only one key, this is like subscribe('*')
 })

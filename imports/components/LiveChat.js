@@ -4,33 +4,35 @@ import { announce, originate } from '../antares'
 import { mockChat } from '../fixtures/chat'
 import * as Actions from '../antares/actions'
 
-// The 4 parts of this file:
+// The parts of this file:
 //  1. The definition of mapStateToProps
-//  2. The definition of mapDispatchToProps (event handlers)
-//  3. The component
-//  4. The export of the connect-wrapped component
+//  2. The component
+//  3. The export of the connect-wrapped component
 
 // Selects the slice of state to be shown in the UI, as a plain JS object
 // The component props combine both antares data (shared for all clients)
 // and view data, particular to each client.
 const mapStateToProps = (state) => {
+    if (!state.antares.hasIn(['chats', 'chat:demo'])) return {}
+
+    // Modify what's returned from state to reflect the view of the currentSender
     const currentSender = state.view.get('viewingAs')
 
-    // Soon we'll use immutableJS, for now, a clone will suffice
-    const viewedChat = { ...mockChat }
+    // Look up and return a modified copy of the state at the key 'chat:demo'
+    // For demo purposes only, convert to raw JS. Performance would favor immutable.
+    return state.antares.getIn(['chats', 'chat:demo'])
+        .set('currentSender', currentSender)
+        .update('messages', messages => messages.map(message => {
+            if (message.get('sender') === currentSender) {
+                return message.set('sentByMe', true)
+            } else {
+                return message
+            }
+        })).toJS()
 
-    // Return the clone, modified to our current view
-    viewedChat.messages
-        .forEach(m => {
-            m.sentByMe = (m.sender === currentSender)
-        })
-
-    return Object.assign(viewedChat, {
-        currentSender
-    })
 }
 
-class _LiveChat extends React.Component {
+class _LiveChat extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = { inProgressMessage: '' }
@@ -104,7 +106,7 @@ class _LiveChat extends React.Component {
                     ))}
                 </div>
 
-                <div className="msg msg-theirs"><i>. . .</i></div>
+                {/*<div className="msg msg-theirs"><i>. . .</i></div>*/}
 
                 <div className="inProgressMessage">
                     <textarea
