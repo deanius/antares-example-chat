@@ -52,6 +52,10 @@ class _LiveChat extends React.Component {
     }
 
     handleSend() {
+        announce(Actions.Message.send({
+            message: this.state.inProgressMessage,
+            sender: this.props.currentSender
+        }))
         this.setState({ inProgressMessage: '' })
     }
 
@@ -81,7 +85,8 @@ class _LiveChat extends React.Component {
                     <button
                       style={{ position: 'relative', top: -1 }}
                       onClick={(e) => {
-                          e.preventDefault()
+                            announce(Actions.Chat.start)
+                            e.preventDefault()
                       }}
                     >Start/Restart Chat ⟳</button>
                 </div>
@@ -93,8 +98,8 @@ class _LiveChat extends React.Component {
                           className={'msg msg-' + (msg.sentByMe ? 'mine' : 'theirs')}
                           title={'Sent at: ' + msg.sentAt + ' by ' + msg.sender}
                         >{msg.message}
-                        { msg.error && ' ⚠️' }    
-    
+                        { msg.error && ' ⚠️' }
+
                         </div>
                     ))}
                 </div>
