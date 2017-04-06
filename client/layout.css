@@ -1,0 +1,75 @@
+#react-root {
+  max-width: 300px;
+}
+
+.instructions {
+  font-size: 12px;
+  margin-bottom: 5px;
+  font-style: italic;
+}
+
+a {
+  text-decoration: none;
+}
+
+.messages {
+  margin-top: 8px;
+  border-top: solid 1px #cccccc;
+  padding-top: 10px;
+}
+
+.msg {
+  margin-bottom: 2px;
+}
+
+.bg-fade {
+    background-image: url('AntaresLogo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: contain center;
+}
+body{
+    font-family: Helvetica, Arial, sans-serif;
+    padding-left: 5px;
+    padding-top: -2px;
+}
+
+/* styles from https://codepen.io/thatdevguy/pen/HbKCf */
+
+.sm {
+  font-size: 90%;
+}
+
+.messages {
+  overflow: auto;
+  magin-top: 10px;
+}
+
+.inProgressMessage { 
+  clear: both;
+  margin-top: 10px;
+  width: 200px;
+}
+
+.msg {
+  clear: both;
+   border-radius: 5px;
+   border: 1px solid gray;
+   max-width: 200px;
+   padding: 3px;
+}
+
+.msg-theirs {
+  float: left;
+  background-color: #ddd;
+}
+
+.msg-mine {
+   float: right;
+   text-align: right;
+   background-color: #aaf;
+}
+
+.sender::before { 
+    content: " | ";
+}

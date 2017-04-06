@@ -7,6 +7,9 @@ const AntaresConfig = {}
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
 
+// expose Antares 'instance methods'
+export const { announce, store, subscribe } = Antares
+
 // In 'any' agent expose a top-level Antares global for demo purposes
 inAgencyRun('any', function () {
     Object.assign(this, {
