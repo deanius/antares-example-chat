@@ -1,8 +1,11 @@
 import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
 import { Observable } from 'meteor/deanius:antares'
+import { ViewReducer } from './reducers'
 
 // Build up a config object, via imports
-const AntaresConfig = {}
+const AntaresConfig = {
+    ViewReducer
+}
 
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
