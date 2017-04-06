@@ -11,8 +11,7 @@ export const Chat = {
                 sentAt: new Date(),
                 sender: 'Other 1'
             }]
-        },
-        meta: { antares: { key: ['chats', 'chat:demo'] } }
+        }
     })
 }
 
@@ -26,8 +25,7 @@ export const Message = {
             sender,
             // Since the user cares about sentAt it's payload, not simply metadata
             sentAt: new Date()
-        },
-        meta: { antares: { key: ['chats', 'chat:demo'] } }
+        }
     })
 }
 
@@ -36,5 +34,17 @@ export const View = {
         type: 'View.selectViewer',
         payload: viewer,
         meta: { antares: { localOnly: true } }
+    })
+}
+
+export const Activity = {
+    type: ({ sender }) => ({
+        type: 'Activity.type',
+        payload: { sender },
+        meta: { antares: { localOnly: true } }
+    }),
+    notifyOfTyping: ({ sender, active=true }) => ({
+        type: 'Activity.notifyOfTyping',
+        payload: { active, sender }
     })
 }

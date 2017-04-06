@@ -17,11 +17,14 @@ const mapStateToProps = (state) => {
 
     // Modify what's returned from state to reflect the view of the currentSender
     const currentSender = state.view.get('viewingAs')
+    const othersTyping = Array.from(state.view.getIn(['activity', 'isTyping']).keys())
+        .filter(sender => sender !== currentSender)
 
     // Look up and return a modified copy of the state at the key 'chat:demo'
     // For demo purposes only, convert to raw JS. Performance would favor immutable.
     return state.antares.getIn(['chats', 'chat:demo'])
         .set('currentSender', currentSender)
+        .set('othersTyping', othersTyping)
         .update('messages', messages => messages.map(message => {
             if (message.get('sender') === currentSender) {
                 return message.set('sentByMe', true)
@@ -29,7 +32,6 @@ const mapStateToProps = (state) => {
                 return message
             }
         })).toJS()
-
 }
 
 class _LiveChat extends React.PureComponent {
@@ -62,8 +64,7 @@ class _LiveChat extends React.PureComponent {
     }
 
     render() {
-        let { currentSender, senders=[], messages=[] } = this.props
-
+        let { currentSender, senders=[], messages=[], othersTyping=[] } = this.props
         return (
             <div>
                 <div className="sm">
@@ -106,7 +107,10 @@ class _LiveChat extends React.PureComponent {
                     ))}
                 </div>
 
-                {/*<div className="msg msg-theirs"><i>. . .</i></div>*/}
+                {
+                    othersTyping.length > 0 &&
+                    <div className="msg msg-theirs"><i>. . .</i></div>
+                }
 
                 <div className="inProgressMessage">
                     <textarea
