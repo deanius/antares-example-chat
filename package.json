@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "meteor run --port 3333",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "deploy:galaxy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy antares-chat-db.meteorapp.com --settings config/settings_production.json"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",
