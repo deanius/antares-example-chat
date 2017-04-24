@@ -11,14 +11,11 @@ import taskModules from './tasks'
 global.WebSocket = WebSocket.Client
 const { Observable } = Rx
 
-const moduleName = process.argv[2] || 'chat'
-const taskModule = taskModules[moduleName]
-
 // config params
 /* ************** Test config ******************* */
 
 const Config = {
-    connectionUrl: 'ws://antares-chat-db.meteorapp.com/websocket',
+    connectionUrl: 'ws://localhost:3333/websocket',
     mongoUrl: 'mongodb://localhost:3031/meteor',
     agentCount: 2,
     actionCountPerAgent: 3,
@@ -26,6 +23,15 @@ const Config = {
     actionTimeout: 5000,
     agentOffset: 'none', // none (stagger eventually)
     randomizer: 'poisson' // none|poisson
+}
+
+// npm run test:load -- chat '{actionCountPerAgent: 10}'
+const moduleName = process.argv[2] || 'chat'
+const taskModule = taskModules[moduleName]
+
+if (process.argv[3]) {
+    const overrides = JSON.parse(process.argv[3])
+    Object.assign(Config, overrides)
 }
 
 // how many ms this agent's work is staggered w.r.t test beginning

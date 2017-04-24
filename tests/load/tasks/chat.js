@@ -28,7 +28,8 @@ export const getTaskGenerator = ({ Antares, chatKey }) => ({ agentIdx, eventIdx 
         },
         meta: {
             antares: {
-                key: chatKey
+                key: chatKey,
+                actionId: Math.round(Math.random() * 10000)
             }
         }
     })

@@ -5,7 +5,8 @@
     "start": "meteor run --port 3333",
     "deploy": "git push heroku master",
     "deploy:galaxy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy antares-chat-db.meteorapp.com --settings config/settings_production.json",
-    "test:load": "./node_modules/babel-cli/bin/babel-node.js --presets node6 tests/load/antaresTest.js"
+    "test:load": "./node_modules/babel-cli/bin/babel-node.js --presets node6 tests/load/antaresTest.js",
+    "test:load:galaxy": "npm run test:load -- chat '{\"connectionUrl\":\"ws://antares-chat-db.meteorapp.com/websocket\"}'"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",
