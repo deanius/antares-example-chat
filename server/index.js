@@ -22,17 +22,10 @@ Antares.subscribeRenderer(({ action, mongoDiff }) => {
     // The mongoDiff object, available after every action, contains enough information to
     // apply the reducer's diffs to a Mongo database.. First we pluck off those interesting fields.
     if (mongoDiff) {
-        let { id, collection, upsert, updateOp } = mongoDiff
-
-        // Then construct the arguments mongo needs to do the update
-        let mongoArgs = [
-            { _id: id },  // the target id for an update, or the _id of the new document
-            updateOp,     // the update op eg. $set{ 'field': 'val' }
-            { upsert }    // mostly set to true
-        ]
+        let { id, updateOp, upsert } = mongoDiff
 
         console.log('MDB> ', updateOp)
         // Do the actual imperative update to the database, and handle exceptions..
-        Chats.update(...mongoArgs)
+        Chats.update(id, updateOp, upsert)
     }
 })
