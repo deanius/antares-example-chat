@@ -1,5 +1,4 @@
 import { Antares } from '/imports/antares'
-
 import { Mongo } from 'meteor/mongo'
 
 // Ensure these collections exist
