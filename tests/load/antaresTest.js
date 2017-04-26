@@ -18,8 +18,8 @@ const Config = {
     connectionUrl: 'ws://localhost:3333/websocket',
     mongoUrl: 'mongodb://localhost:3031/meteor',
     agentCount: 2,
-    actionCountPerAgent: 3,
-    actionIntervalAverage: 100,
+    actionCountPerAgent: 10,
+    actionIntervalAverage: 900,
     actionTimeout: 5000,
     agentOffset: 'none', // none (stagger eventually)
     randomizer: 'poisson' // none|poisson
