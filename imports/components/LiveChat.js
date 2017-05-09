@@ -37,17 +37,22 @@ const mapStateToProps = (state) => {
 class _LiveChat extends React.PureComponent {
     constructor(props) {
         super(props)
-        this.state = { inProgressMessage: '' }
+        this.state = { inProgressMessage: '', messageError: null }
         this.handleTyping = this.handleTyping.bind(this)
         this.handleSend = this.handleSend.bind(this)
         this.handleKeyPress = this.handleKeyPress.bind(this)
     }
 
     handleKeyPress(event) {
+        if (event.keyCode === 27) {
+            this.setState({ messageError: null })
+            return
+        }
         if (event.key === 'Enter') {
             event.preventDefault()
             this.handleSend()
         }
+        this.setState({ messageError: null })
     }
 
     handleTyping(event) {
@@ -59,15 +64,21 @@ class _LiveChat extends React.PureComponent {
     }
 
     handleSend() {
-        announce(Actions.Message.send({
+        Promise.resolve(Actions.Message.send({
             message: this.state.inProgressMessage,
             sender: this.props.currentSender
-        }))
-        this.setState({ inProgressMessage: '' })
+        })).then(action => {
+            return announce(action)
+        }).catch(e => {
+            if (e.constructor.name !== 'ValidationError') throw e
+            this.setState({ messageError: e.message })
+        })
+        this.setState({ inProgressMessage: '', messageError: null })
     }
 
     render() {
-        let { currentSender, senders=[], messages=[], othersTyping=[] } = this.props
+        let { currentSender, senders = [], messages = [], othersTyping = [] } = this.props
+        let { messageError } = this.state
         return (
             <div>
                 <div className="sm">
@@ -121,7 +132,12 @@ class _LiveChat extends React.PureComponent {
                       value={this.state.inProgressMessage}
                       onChange={this.handleTyping}
                       onKeyPress={this.handleKeyPress}
+                      onKeyDown={this.handleKeyPress}
+                      style={ messageError ? { border: '5px solid red' } : {} }
                     />
+                    {
+                        messageError && <div style={{ color: 'red' }}>{messageError}</div>
+                    }
                     <br />
                     <button onClick={this.handleSend}>Send ➩</button>
                 </div>

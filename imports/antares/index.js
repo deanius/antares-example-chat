@@ -2,6 +2,7 @@ import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:anta
 import { Observable } from 'meteor/deanius:antares'
 import { ViewReducer, ChatReducer } from './reducers'
 import Epics from './epics'
+import Types from './types'
 
 const useDemoGame = () => {
     return { key: ['chats', 'chat:demo'] }
@@ -13,7 +14,8 @@ const AntaresConfig = {
     // given a key ['chats', 'id'], which reducer do we use?
     ReducerForKey: (key) => ChatReducer,
     MetaEnhancers: [useDemoGame],
-    Epics
+    Epics,
+    Types
 }
 
 // Pass the config to the meteorized version of AntaresInit
