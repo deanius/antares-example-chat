@@ -30,6 +30,8 @@ const envs = {
         connectionUrl: 'ws://localhost:3333/websocket'
     },
     production: {
+        agentCount: 2,
+        actionCountPerAgent: 1,
         connectionUrl: 'wss://antares-chat-db.meteorapp.com/websocket'
     }
 }
