@@ -1,3 +1,5 @@
+import Promise from 'bluebird'
+
 /* eslint-disable */
 // each agent can look up by their index what user to be
 let senderIds = {
@@ -24,6 +26,11 @@ export const getTaskGenerator = ({ Antares, chatKey }) => ({ agentIdx, eventIdx 
     // allow us to look for the return value
     let actionId = Math.round(Math.random() * 10000)
 
+    let serverResponse = Antares.serverAction$
+        .filter(({ meta }) => meta && meta.antares && meta.antares.actionId === actionId)
+        .first()
+        .toPromise()
+
     return Antares.asteroid.call('antares.acknowledge', {
         type: 'Message.send',
         payload: {
@@ -33,8 +40,17 @@ export const getTaskGenerator = ({ Antares, chatKey }) => ({ agentIdx, eventIdx 
         meta: {
             antares: {
                 key: chatKey,
-                actionId
+                actionId,
+                reflectAction: true // so we see our response
             }
         }
-    })
+    }).then(() => serverResponse)
+}
+
+export const openSubscriptions = ({ Antares, chatKey }) => {
+    Antares.subscribe({ key: chatKey })
+    // Antares.asteroid.ddp.on('added', msg => {
+    //     console.log ('DDP ', msg)
+    // })
+    // todo return a promise for when this is ready
 }
