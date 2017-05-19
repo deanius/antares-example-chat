@@ -25,14 +25,29 @@ const Config = {
     randomizer: 'poisson' // none|poisson
 }
 
-// npm run test:load -- chat '{actionCountPerAgent: 10}'
-const moduleName = process.argv[2] || 'chat'
+const envs = {
+    development: {
+        connectionUrl: 'ws://localhost:3333/websocket'
+    },
+    production: {
+        connectionUrl: 'wss://antares-chat-db.meteorapp.com/websocket'
+    }
+}
+
+// npm run test:load -- development|production
+const moduleName = 'chat'
 const taskModule = taskModules[moduleName]
 
-if (process.argv[3]) {
-    const overrides = JSON.parse(process.argv[3])
-    Object.assign(Config, overrides)
-}
+const env = process.argv[2] || 'development'
+Object.assign(
+    Config,
+    { env },
+    envs[env]
+)
+// if (process.argv[3]) {
+//     const overrides = JSON.parse(process.argv[3])
+//     Object.assign(Config, overrides)
+// }
 
 // how many ms this agent's work is staggered w.r.t test beginning
 const getAgentStagger = () => {

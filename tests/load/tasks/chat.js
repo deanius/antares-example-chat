@@ -20,6 +20,10 @@ export const getTestDocumentIds = () => {
 export const getTaskGenerator = ({ Antares, chatKey }) => ({ agentIdx, eventIdx }) => {
     let sender = senderIds[agentIdx % 2]
     let prefix = ['Hey', 'Hi'][agentIdx % 2]
+
+    // allow us to look for the return value
+    let actionId = Math.round(Math.random() * 10000)
+
     return Antares.asteroid.call('antares.acknowledge', {
         type: 'Message.send',
         payload: {
@@ -29,7 +33,7 @@ export const getTaskGenerator = ({ Antares, chatKey }) => ({ agentIdx, eventIdx 
         meta: {
             antares: {
                 key: chatKey,
-                actionId: Math.round(Math.random() * 10000)
+                actionId
             }
         }
     })
