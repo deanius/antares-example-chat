@@ -1,4 +1,4 @@
-import { AntaresMeteorInit, AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
+import { AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
 import { Observable } from 'meteor/deanius:antares'
 import { ViewReducer, ChatReducer } from './reducers'
 import Epics from './epics'
@@ -19,7 +19,7 @@ const AntaresConfig = {
 }
 
 // Pass the config to the meteorized version of AntaresInit
-export const Antares = AntaresMeteorInit(AntaresInit)(AntaresConfig)
+export const Antares = AntaresInit(AntaresConfig)
 
 // expose Antares 'instance methods'
 export const { announce, originate, store, subscribe } = Antares
