@@ -122,8 +122,8 @@ class _LiveChat extends React.PureComponent {
                 </div>
 
                 {
-                    othersTyping.length > 0 &&
-                    <div className="msg msg-theirs"><i>. . .</i></div>
+                    (othersTyping.length > 0) &&
+                    <div className="msg msg-theirs isTyping">&nbsp;</div>
                 }
 
                 <div className="inProgressMessage">
