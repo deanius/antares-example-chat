@@ -15,7 +15,7 @@ Object.assign(global, {
 const mongoRenderer = ({ action, mongoDiff }) => {
     if (!mongoDiff) return
 	let { id, updateOp, upsert } = mongoDiff
-	console.log('MDB> ', updateOp)
+	console.log(`MDB (${action.meta.antares.actionId})> `, updateOp)
 	Chats.update(id, updateOp, upsert)
 }
 Antares.subscribeRenderer(mongoRenderer)
