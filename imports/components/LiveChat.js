@@ -111,7 +111,7 @@ class _LiveChat extends React.PureComponent {
                 <div className="messages">
                     {messages.map(msg => (
                         <div
-                          key={Math.floor(Math.random() * 10000)}
+                          key={Math.floor(Math.random() * 10000000).toString(16)}
                           className={'msg msg-' + (msg.sentByMe ? 'mine' : 'theirs')}
                           title={'Sent at: ' + msg.sentAt + ' by ' + msg.sender}
                         >{msg.message}

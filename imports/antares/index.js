@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { AntaresInit, inAgencyRun } from 'meteor/deanius:antares'
 import { Observable } from 'meteor/deanius:antares'
 import { ViewReducer, ChatReducer } from './reducers'
@@ -16,7 +17,10 @@ const AntaresConfig = {
     ReducerForKey: (key) => ChatReducer,
     MetaEnhancers: [useDemoGame],
     Epics,
-    Types
+    Types,
+    onKeyNotDefined: Meteor.bindEnvironment((key) => {
+        return Chats.findOne('chat:demo')
+    })
 }
 
 // Pass the config to the meteorized version of AntaresInit
