@@ -1,5 +1,6 @@
 import Actions from './actions'
 import { Observable } from 'meteor/deanius:antares'
+import { store, subscribeRenderer } from './index'
 
 // Creates an action that cancels typingIndication for that sender,
 //  but is not broadcast to other nodes
@@ -13,13 +14,6 @@ const createCancelActionFor = typingSender => ({
 })
 
 export default {
-    notifyOfTyping: action$ =>
-        action$.ofType('Activity.type')
-            .throttleTime(1000)
-            .map(a => Actions.Activity.notifyOfTyping({
-                sender: a.payload.sender
-            })),
-
     dismissTypingV1: action$ => {
         // Given a senders Id, returns an Observable which emits a
         // typing cancellation action when a message comes from that sender

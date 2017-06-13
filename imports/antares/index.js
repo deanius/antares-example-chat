@@ -27,7 +27,7 @@ const AntaresConfig = {
 export const Antares = AntaresInit(AntaresConfig)
 
 // expose Antares 'instance methods'
-export const { announce, originate, store, subscribe } = Antares
+export const { announce, originate, store, subscribe, subscribeRenderer } = Antares
 
 // In 'any' agent expose a top-level Antares global for demo purposes
 inAgencyRun('any', function () {
