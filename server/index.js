@@ -5,8 +5,8 @@ import { Mongo } from 'meteor/mongo'
 const Chats = new Mongo.Collection('Chats')
 const Actions = new Mongo.Collection('Actions')
 Object.assign(global, {
-    Chats,
-    Actions
+  Chats,
+  Actions
 })
 
 // Here, on the server, where calling Collections.Foo.update would
@@ -14,31 +14,45 @@ Object.assign(global, {
 // to the {$update} objects Mongo requires to implement those diffs.
 // Antares programmatically translates diffs in your object graphs
 // into database update command invocations.
-const mongoRenderer = ({ action: { meta: { antares: actionId } }, mongoDiff }) => {
-    if (!mongoDiff) return
-	let { id, updateOp, upsert } = mongoDiff
-	console.log(`MDB (${actionId})> `, updateOp)
-	Chats.update(id, updateOp, upsert)
+const mongoRenderer = ({
+  action: { meta: { antares: { actionId } } },
+  mongoDiff
+}) => {
+  if (!mongoDiff) return
+  let { id, updateOp, upsert } = mongoDiff
+  // Object.assign(updateOp, {$set: {_id: id}})
+  if (updateOp.$set) {
+    updateOp.$set._id = id
+  }
+  console.log(`MDB (${actionId})> [chats, ${id}] upsert: ${upsert}`, updateOp)
+  Chats.update(id, updateOp, upsert)
 }
-Antares.subscribeRenderer(mongoRenderer)
-
+Antares.subscribeRenderer(Meteor.bindEnvironment(mongoRenderer))
 
 const twilioRenderer = ({ action }) => {
-    console.log('Sending to twilio', action.payload.message)
-    const message = action.payload.message
-    const twilio = require('twilio')
-    const client = new twilio.RestClient(process.env.DEMO_TWILIO_SID, process.env.DEMO_TWILIO_TOKEN);
+  console.log('Sending to twilio', action.payload.message)
+  const message = action.payload.message
+  const twilio = require('twilio')
+  const client = new twilio.RestClient(
+    process.env.DEMO_TWILIO_SID,
+    process.env.DEMO_TWILIO_TOKEN
+  )
 
-    client.messages.create({
-        body: message,
-        to: process.env.DEMO_TWILIO_TO,
-        from: process.env.DEMO_TWILIO_FROM
-    }, (err, r) => console.log({ err, r }))
+  client.messages.create(
+    {
+      body: message,
+      to: process.env.DEMO_TWILIO_TO,
+      from: process.env.DEMO_TWILIO_FROM
+    },
+    (err, r) => console.log({ err, r })
+  )
 }
 
 Antares.subscribeRenderer(twilioRenderer, {
-    mode: 'async',
-    xform: action$ => action$.filter(({ action }) =>
+  mode: 'async',
+  xform: action$ =>
+    action$.filter(
+      ({ action }) =>
         action.type === 'Message.send' && action.payload.message.includes('SMS')
     )
 })

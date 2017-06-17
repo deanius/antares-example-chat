@@ -12,6 +12,7 @@ const sendersReducer = createReducer({
 export const ChatReducer = combineReducers({
     senders: sendersReducer,
     messages: messageReducer,
+    _id: () => 'chat:demo'
 })
 
 const activityReducer = createReducer({

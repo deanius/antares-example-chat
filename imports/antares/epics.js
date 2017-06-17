@@ -29,7 +29,7 @@ export default {
         }
       })
       .then(results => {
-        return results && results.length > 0 && results[0].url
+        return results.data.data.length > 0 && results.data.data[0].url
       })
   }),
 

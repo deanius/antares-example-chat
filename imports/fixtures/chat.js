@@ -1,4 +1,5 @@
 export const mockChat = {
+    _id: 'chat:demo',
     senders: ['Self', 'Azra', 'Bubba'],
     messages: [{
         message: 'Hey',
