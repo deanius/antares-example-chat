@@ -1,5 +1,5 @@
 export const mockChat = {
-    senders: ['Self', 'Other 1', 'Other 2'],
+    senders: ['Self', 'Azra', 'Bubba'],
     messages: [{
         message: 'Hey',
         sentAt: new Date(),
@@ -9,7 +9,7 @@ export const mockChat = {
     {
         message: 'Sup?',
         sentAt: new Date(),
-        sender: 'Other 1',
+        sender: 'Azra',
         sentByMe: false
     }]
 }

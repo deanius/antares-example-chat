@@ -7,34 +7,43 @@ import Types from './types'
 import * as Actions from './actions'
 
 const useDemoGame = () => {
-    return { key: ['chats', 'chat:demo'] }
+  return { key: ['chats', 'chat:demo'] }
 }
 
 // Build up a config object, via imports
 const AntaresConfig = {
-    ViewReducer,
-    // given a key ['chats', 'id'], which reducer do we use?
-    ReducerForKey: (key) => ChatReducer,
-    MetaEnhancers: [useDemoGame],
-    Epics,
-    Types,
-    onKeyNotDefined: Meteor.bindEnvironment((key) => {
-        return Chats.findOne('chat:demo')
-    })
+  ViewReducer,
+  // Given a key array, ['chats', 'demo:game'], which reducer do we use?
+  ReducerForKey: key => ChatReducer,
+  MetaEnhancers: [useDemoGame],
+  Epics,
+  Types,
+  // Our cache populator: a fn called with `key` when
+  //  typeof store.getIn(key) === "undefined"
+  onCacheMiss: Meteor.bindEnvironment(key => {
+      console.log(`Ca: ${key}`)
+    return Chats.findOne('chat:demo')
+  })
 }
 
 // Pass the config to the meteorized version of AntaresInit
 export const Antares = AntaresInit(AntaresConfig)
 
 // expose Antares 'instance methods'
-export const { announce, originate, store, subscribe, subscribeRenderer } = Antares
+export const {
+  announce,
+  originate,
+  store,
+  subscribe,
+  subscribeRenderer
+} = Antares
 
 // In 'any' agent expose a top-level Antares global for demo purposes
-inAgencyRun('any', function () {
-    Object.assign(this, {
-        Antares,
-        Observable,
-        Actions
-    })
-    // TODO define startup code here
+inAgencyRun('any', function() {
+  Object.assign(this, {
+    Antares,
+    Observable,
+    Actions
+  })
+  // TODO define startup code here
 })

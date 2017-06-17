@@ -5,11 +5,11 @@ export const Chat = {
     start: () => ({
         type: 'Antares.store',
         payload: {
-            senders: ['Self', 'Other 1', 'Other 2'],
+            senders: ['Self', 'Azra', 'Bubba'],
             messages: [{
                 message: 'Hello',
                 sentAt: new Date(),
-                sender: 'Other 1'
+                sender: 'Azra'
             }]
         }
     })

@@ -4,8 +4,8 @@ import Promise from 'bluebird'
 // each agent can look up by their index what user to be
 let senderIds = {
     0: 'Self',
-    1: 'Other 1',
-    2: 'Other 2'
+    1: 'Azra',
+    2: 'Bubba'
 }
 
 // Returns the document(s)/users this test will operate on

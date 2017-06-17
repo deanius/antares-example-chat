@@ -9,13 +9,15 @@ Object.assign(global, {
     Actions
 })
 
-// On the server, where Collections.Foo.update would make sense,
-// write to the database.
-// On the server, where Collections.Foo.update would make sense, write to the database.
-const mongoRenderer = ({ action, mongoDiff }) => {
+// Here, on the server, where calling Collections.Foo.update would
+// make sense, we define how we map diffs in the application objects
+// to the {$update} objects Mongo requires to implement those diffs.
+// Antares programmatically translates diffs in your object graphs
+// into database update command invocations.
+const mongoRenderer = ({ action: { meta: { antares: actionId } }, mongoDiff }) => {
     if (!mongoDiff) return
 	let { id, updateOp, upsert } = mongoDiff
-	console.log(`MDB (${action.meta.antares.actionId})> `, updateOp)
+	console.log(`MDB (${actionId})> `, updateOp)
 	Chats.update(id, updateOp, upsert)
 }
 Antares.subscribeRenderer(mongoRenderer)

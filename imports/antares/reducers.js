@@ -7,7 +7,7 @@ const messageReducer = createReducer({
 }, new iList([]))
 
 const sendersReducer = createReducer({
-}, new iList(['Self', 'Other 1', 'Other 2']))
+}, new iList(['Self', 'Azra', 'Bubba']))
 
 export const ChatReducer = combineReducers({
     senders: sendersReducer,
