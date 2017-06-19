@@ -15,23 +15,17 @@ const createCancelActionFor = typingSender => ({
 })
 
 export default {
-  getGiphy: createPromiseEpic('Message.send', ({ payload: { message } }) => {
-    if (!message.startsWith('/giphy') || Meteor.isServer)
-      return Promise.resolve()
+  getGiphy: action$ => {
+    return action$.ofType('Message.send').mergeMap(action => {
+      if (!message.startsWith('/giphy') || Meteor.isServer)
+        return Observable.empty()
 
-    let searchTerm = message.split()[1]
-    console.log('searching for ' + searchTerm)
-    return axios
-      .get('http://api.giphy.com/v1/gifs/search', {
-        params: {
-          api_key: 'dc6zaTOxFJmzC',
-          q: 'kitty'
-        }
+      return Observable.of({
+        type: 'foo.bar',
+        payload: {}
       })
-      .then(results => {
-        return results.data.data.length > 0 && results.data.data[0].url
-      })
-  }),
+    })
+  },
 
   dismissTypingV1: action$ => {
     // Given a senders Id, returns an Observable which emits a

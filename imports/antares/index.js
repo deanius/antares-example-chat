@@ -4,7 +4,6 @@ import { Observable } from 'meteor/deanius:antares'
 import { ViewReducer, ChatReducer } from './reducers'
 import Epics from './epics'
 import Types from './types'
-import * as Actions from './actions'
 
 const useDemoGame = () => {
   return { key: ['chats', 'chat:demo'] }
@@ -44,8 +43,7 @@ export const {
 inAgencyRun('any', function() {
   Object.assign(this, {
     Antares,
-    Observable,
-    Actions
+    Observable
   })
   // TODO define startup code here
 })
