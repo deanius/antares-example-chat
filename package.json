@@ -1,6 +1,9 @@
 {
   "name": "antares-example-chat",
   "private": true,
+  "scripts-info": {
+    "deploy:galaxy": "Use the 'Official' Meteor Hosting place, Galaxy"
+  },
   "scripts": {
     "start": "MONGO_URL=$DEMO_MONGO_URL meteor run --port 3333",
     "deploy": "git push heroku master",
