@@ -11,7 +11,7 @@ Object.assign(global, {
 
 // A renderer that will throw an error if a Message.send with 'server error' in its message appears
 Antares.subscribeRenderer(
-  Meteor.bindEnvironment(({ action }) => {
+  ({ action }) => {
     if (
       action.payload &&
       action.payload.message &&
@@ -19,7 +19,7 @@ Antares.subscribeRenderer(
     ) {
       throw new Error('crazy one')
     }
-  }),
+  },
   { mode: 'sync' }
 )
 
