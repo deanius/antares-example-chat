@@ -17,7 +17,7 @@ const createCancelActionFor = typingSender => ({
 export default {
   getGiphy: action$ => {
     return action$.ofType('Message.send').mergeMap(action => {
-      if (!message.startsWith('/giphy') || Meteor.isServer)
+      if (! action.payload && action.payload.message && action.payload.message.startsWith('/giphy') || Meteor.isServer)
         return Observable.empty()
 
       return Observable.of({
@@ -27,14 +27,13 @@ export default {
     })
   },
 
-  dismissTypingV1: action$ => {
+  dismissTypingV1: Meteor.isServer ? null : action$ => {
     // Given a senders Id, returns an Observable which emits a
     // typing cancellation action when a message comes from that sender
-    const dismissUponMessageFrom = typingSender =>
+    const messageReceivedFrom = (typingSender, action$) =>
       action$
         .ofType('Message.send')
         .filter(newMsgAction => newMsgAction.payload.sender === typingSender)
-        .mapTo(createCancelActionFor(typingSender))
 
     // Given a senders Id, returns an observable that in 2500 msec
     //   emits an action to turn the indicator off for that sender
@@ -46,9 +45,9 @@ export default {
       .filter(a => a.payload.active === true)
       .switchMap(notifyAction =>
         Observable.race(
-          dismissUponMessageFrom(notifyAction.payload.sender),
+          messageReceivedFrom(notifyAction.payload.sender, action$),
           timeoutIndicator(notifyAction.payload.sender)
-        )
+        ).mapTo(createCancelActionFor(notifyAction.payload.sender))
       )
   }
 }

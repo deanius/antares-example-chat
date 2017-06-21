@@ -9,6 +9,20 @@ Object.assign(global, {
   Actions
 })
 
+// A renderer that will throw an error if a Message.send with 'server error' in its message appears
+Antares.subscribeRenderer(
+  Meteor.bindEnvironment(({ action }) => {
+    if (
+      action.payload &&
+      action.payload.message &&
+      action.payload.message.includes('server error')
+    ) {
+      throw new Error('crazy one')
+    }
+  }),
+  { mode: 'sync' }
+)
+
 // Here, on the server, where calling Collections.Foo.update would
 // make sense, we define how we map diffs in the application objects
 // to the {$update} objects Mongo requires to implement those diffs.
@@ -27,7 +41,9 @@ const mongoRenderer = ({
   console.log(`MDB (${actionId})> [chats, ${id}] upsert: ${upsert}`, updateOp)
   Chats.update(id, updateOp, upsert)
 }
-Antares.subscribeRenderer(Meteor.bindEnvironment(mongoRenderer))
+Antares.subscribeRenderer(Meteor.bindEnvironment(mongoRenderer), {
+  mode: 'sync'
+})
 
 const twilioRenderer = ({ action }) => {
   console.log('Sending to twilio', action.payload.message)

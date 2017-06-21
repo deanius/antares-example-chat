@@ -42,7 +42,11 @@ const mapStateToProps = state => {
 class _LiveChat extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = { inProgressMessage: '', messageError: null }
+    this.state = {
+      inProgressMessage: '',
+      messageError: null,
+      sendTypingNotifications: true
+    }
     this.handleTyping = this.handleTyping.bind(this)
     this.handleSend = this.handleSend.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -73,7 +77,16 @@ class _LiveChat extends React.PureComponent {
     this.setState({ inProgressMessage: event.target.value })
 
     // Announce one of these events (locally) on every change
+    if (this.state.sendTypingNotifications === false) return
     announce(Actions.Activity.type, { sender: this.props.currentSender })
+  }
+
+  toggleNotify(event) {
+    this.setState(s => ({
+      ...s,
+      sendTypingNotifications: !!!s.sendTypingNotifications
+    }))
+    // console.log('TODO toggle notify')
   }
 
   handleSend() {
@@ -131,6 +144,16 @@ class _LiveChat extends React.PureComponent {
           >
             Start/Restart Chat ⟳
           </button>
+
+          Typing Notifications?
+          {' '}
+          <input
+            type="checkbox"
+            name="toggleNotify"
+            checked={this.state.sendTypingNotifications}
+            onChange={this.toggleNotify.bind(this)}
+          />
+
         </div>
 
         <div className="messages">
