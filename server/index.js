@@ -1,5 +1,6 @@
 import { Antares } from '/imports/antares'
 import { Mongo } from 'meteor/mongo'
+import { Promise } from 'meteor/promise'
 
 // Ensure these collections exist
 const Chats = new Mongo.Collection('Chats')
@@ -9,7 +10,7 @@ Object.assign(global, {
   Actions
 })
 
-// A renderer that will throw an error if a Message.send with 'server error' in its message appears
+// A renderer that will throw an error if a payload contains 'server error'
 Antares.subscribeRenderer(
   ({ action }) => {
     if (
@@ -23,16 +24,32 @@ Antares.subscribeRenderer(
   { mode: 'sync' }
 )
 
+// A renderer that will slow us down if a payload contains
+Antares.subscribeRenderer(
+  ({ action }) => {
+    if (
+      action.payload &&
+      action.payload.message &&
+      action.payload.message.includes('slow')
+    ) {
+      Promise.await(new Promise(resolve => setTimeout(resolve, 2000)))
+    }
+  },
+  { mode: 'sync' }
+)
+
 // Here, on the server, where calling Collections.Foo.update would
 // make sense, we define how we map diffs in the application objects
 // to the {$update} objects Mongo requires to implement those diffs.
 // Antares programmatically translates diffs in your object graphs
 // into database update command invocations.
 const mongoRenderer = ({
-  action: { meta: { antares: { actionId } } },
+  action: { meta: { antares: { actionId, localOnly } } },
   mongoDiff
 }) => {
   if (!mongoDiff) return
+  if (localOnly) return
+
   let { id, updateOp, upsert } = mongoDiff
   // Object.assign(updateOp, {$set: {_id: id}})
   if (updateOp.$set) {
@@ -41,6 +58,7 @@ const mongoRenderer = ({
   console.log(`MDB (${actionId})> [chats, ${id}] upsert: ${upsert}`, updateOp)
   Chats.update(id, updateOp, upsert)
 }
+
 Antares.subscribeRenderer(Meteor.bindEnvironment(mongoRenderer), {
   mode: 'sync'
 })

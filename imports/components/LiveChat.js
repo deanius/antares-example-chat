@@ -45,7 +45,7 @@ class _LiveChat extends React.PureComponent {
     this.state = {
       inProgressMessage: '',
       messageError: null,
-      sendTypingNotifications: true
+      sendTypingNotifications: false
     }
     this.handleTyping = this.handleTyping.bind(this)
     this.handleSend = this.handleSend.bind(this)
@@ -90,22 +90,21 @@ class _LiveChat extends React.PureComponent {
   }
 
   handleSend() {
-    Promise.resolve(
-      Actions.Message.send({
-        message: this.state.inProgressMessage,
-        sender: this.props.currentSender
-      })
-    )
-      .then(action => {
-        return announce(action)
-      })
+    let action = Actions.Message.send({
+      message: this.state.inProgressMessage,
+      sender: this.props.currentSender
+    })
+
+    Promise.resolve(action)
+      .then(announce)
       .catch(e => {
         if (e.constructor.name !== 'ValidationError') throw e
         this.setState({ messageError: e.message })
       })
       .catch(e => {
-        console.error('WTF: ', e)
+        console.error('Unknown error: ', e)
       })
+
     this.setState({ inProgressMessage: '', messageError: null })
   }
 
