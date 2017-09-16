@@ -23,16 +23,16 @@ a {
 }
 
 .bg-fade {
-    background-image: url('AntaresLogo.png');
-    background-repeat: no-repeat;
-    background-size: 500px;
-    background-position: contain center;
+  background-image: url('AntaresLogo.png');
+  background-repeat: no-repeat;
+  background-size: 500px;
+  background-position: contain center;
 }
 
-body{
-    font-family: Helvetica, Arial, sans-serif;
-    padding-left: 5px;
-    padding-top: -2px;
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  padding-left: 5px;
+  padding-top: -2px;
 }
 
 /* styles from https://codepen.io/thatdevguy/pen/HbKCf */
@@ -54,10 +54,10 @@ body{
 
 .msg {
   clear: both;
-   border-radius: 5px;
-   border: 1px solid gray;
-   max-width: 200px;
-   padding: 3px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  max-width: 200px;
+  padding: 3px;
 }
 
 .msg-theirs {
@@ -66,13 +66,13 @@ body{
 }
 
 .msg-mine {
-   float: right;
-   text-align: right;
-   background-color: #aaf;
+  float: right;
+  text-align: right;
+  background-color: #aaf;
 }
 
 .sender::before {
-    content: " | ";
+  content: ' | ';
 }
 
 .isTyping {

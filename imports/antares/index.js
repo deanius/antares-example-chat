@@ -21,7 +21,7 @@ const AntaresConfig = {
   //  typeof store.getIn(key) === "undefined"
   onCacheMiss: Meteor.bindEnvironment(key => {
     if (Meteor.isServer) {
-      console.log(`AC > Cache repopulating ${key}`)
+      console.log(`AC> Cache repopulating ${key}`)
       return Chats.findOne('chat:demo')
     }
   })
