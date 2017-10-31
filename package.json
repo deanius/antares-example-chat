@@ -21,7 +21,7 @@
     "twilio": "^2.11.1"
   },
   "devDependencies": {
-    "antares-protocol": "^0.3.17",
+    "antares-protocol": "^0.4.13",
     "ascii-progress": "^1.0.5",
     "babel-cli": "^6.24.1",
     "babel-preset-node6": "^11.0.0",
